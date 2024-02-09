@@ -9,7 +9,7 @@ class TestLZMA(unittest.TestCase):
         test_string = "122122112211122112221122112111212221222111"
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
@@ -17,7 +17,7 @@ class TestLZMA(unittest.TestCase):
         test_string = "ABABABAABAB"
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
@@ -25,7 +25,7 @@ class TestLZMA(unittest.TestCase):
         test_string = "ASDCNNCASSSMCCAMSDMMDSASDASDCNNCASSSMCCAMSDMMDSASD"
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
@@ -33,7 +33,7 @@ class TestLZMA(unittest.TestCase):
         test_string = "ASDCNNCASSSMCCAMSDMMDSASDASDCNNCASSSMCCAMSDMMDSASDASDCNNCASSSMCCAMSDMMDSASD"
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
@@ -41,7 +41,7 @@ class TestLZMA(unittest.TestCase):
         test_string = "ASDMC1231ASDCAASD2313DASCASD23235488ASDCASDMC1231ASDCAASD2313DASCASD23235488ASDCASDMC1231ASDCAASD2313DASCASD23235488ASDC"
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
@@ -49,7 +49,7 @@ class TestLZMA(unittest.TestCase):
         test_string = "ASDMC1231ASDCAASD2313DASCASD23235488ASDCASDMC1231ASDCAASD2313DASCASD23235488ASDC"
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
@@ -57,7 +57,7 @@ class TestLZMA(unittest.TestCase):
         test_string = "ASDM C1231 ASDCA ASD23 13DASCASD232354 88ASDCASDMC1231AS DCAASD  2313DASC ASD2323548 8ASDC    ASDM C1231ASDCAA  SD2313D ASCASD23235488ASDC "
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
@@ -65,7 +65,7 @@ class TestLZMA(unittest.TestCase):
         test_string = " ASDMC1231  ASDCAASD231 3DASCASD2323 5488ASDCASDMC 1231ASDCAA SD2313DAS CASD2 3 2 3 5 488ASDC"
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
@@ -73,7 +73,7 @@ class TestLZMA(unittest.TestCase):
         test_string = "ASCII, stands for American Standard Code for Information Interchange. It is a 7-bit character code where each individual bit represents a unique character. This page shows the extended ASCII table which is based on the Windows-1252 character set which is an 8 bit ASCII table with 256 characters and symbols."
         result, compression_ratio, time_delta = perform_test(test_string)
         if result:
-            print_stats(self._testMethodName, test_string,
+            print_stats(self.id(), test_string,
                         compression_ratio, time_delta)
         self.assertTrue(result, f"\n\tTest failed for string: \n{test_string}")
 
