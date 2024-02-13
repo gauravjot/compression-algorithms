@@ -3,7 +3,7 @@ from lzma import compress, decompress
 
 def main():
     # Array of test strings made of alphanumeric
-    input_string = "ASDMC1231ASDCAASD2313DASCASD23235488ASDCASDMC1231ASDCAASD2313DASCASD23235488ASDC"
+    input_string = " ASDMC1231  ASDCAASD231 3DASCASD2323 5488ASDCASDMC 1231ASDCAA SD2313DAS CASD2 3 2 3 5 488ASDC"
 
     compressed = compress(input_string)
     decompressed = decompress(compressed)

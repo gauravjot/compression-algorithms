@@ -12,7 +12,7 @@ def compress(input_string: str) -> str:
     Compress the input string using LZMA algorithm
         - Book is used by LZMA to store the phrase and the corresponding code
     """
-    book: Dict[str, int] = {"": 0}
+    book: Dict[str, int] = {"": 0, " ": 1}
     compressed: str = ""
     phrase: str = ""
     for char in input_string:
@@ -26,12 +26,9 @@ def compress(input_string: str) -> str:
             We first check for prior phrase if it exists
                 then we compress it first
             """
-            if len(phrase) > 0 and phrase not in book:
-                book, compressed_phrase = _compress_phrase(
-                    book, phrase)
+            if len(phrase) > 0:
+                book, compressed_phrase = _compress_phrase(book, phrase)
                 compressed += compressed_phrase
-            elif len(phrase) > 0:
-                compressed += phrase
             """
             Now that it is a single char that is a number
                 we compress it which it will do numeric escape
@@ -49,16 +46,16 @@ def compress(input_string: str) -> str:
         """
         book, compressed_phrase = _compress_phrase(book, phrase)
         compressed += compressed_phrase
-        # if len(book) > 110 and len(book) < 120:
-        #     print(f"Book: {book} {len(book)}")
-        #     print(f"Phrase: '{phrase}'")
-        #     print(f"Compressed: '{compressed}'")
-        #     print("----")
+        if len(book) > 17:
+            print(f"Book: {book} {len(book)}")
+            print(f"Phrase: '{phrase}'")
+            print(f"Compressed: '{compressed}'")
+            print("----")
         phrase = ''
     compressed += phrase
-    # print("----")
-    # print(f"Book: {len(book)}")
-    # print(f"C Book: {book}")
+    print("----")
+    print(f"Book: {len(book)}")
+    print(f"C Book: {book}")
     return compressed
 
 
@@ -67,10 +64,10 @@ def decompress(compressed: str) -> str:
     Decompress the input string using LZMA algorithm
     """
     # Book is used by LZMA to store the phrase and the corresponding code
-    book: Dict[int, str] = {0: ""}
+    book: Dict[int, str] = {0: "", 1: " "}
+    bookInv: Dict[str, int] = {"": 0, " ": 1}
     decompressed: str = ""
     phrase: str = ""
-    vals_in_book: list[str] = []
     numeric_escape_next_char: bool = False
     for char in compressed:
         """
@@ -85,17 +82,18 @@ def decompress(compressed: str) -> str:
             numeric_escape_next_char = True
             if len(phrase) > 0:
                 # Decompress the phrase before
-                book, decompressed_phrase, vals_in_book = _decompress_phrase(
-                    book, phrase, vals_in_book)
+                book, decompressed_phrase, bookInv = _decompress_phrase(
+                    book, phrase, bookInv)
                 decompressed += decompressed_phrase
                 phrase = ''
             continue
+        # Add the character to the phrase
         phrase += char
         if numeric_escape_next_char:
             numeric_escape_next_char = False
             decompressed += phrase
             book[len(book)] = phrase
-            vals_in_book.append(phrase)
+            bookInv[phrase] = len(book)
             phrase = ''
             continue
         """
@@ -107,21 +105,22 @@ def decompress(compressed: str) -> str:
         """
         Decompress and add it to book
         """
-        book, decompressed_phrase, vals_in_book = _decompress_phrase(
-            book, phrase, vals_in_book)
+        book, decompressed_phrase, bookInv = _decompress_phrase(
+            book, phrase, bookInv)
         decompressed += decompressed_phrase
-        # if (len(book) > 124):
+        # if (len(book) > 15):
+        #     print("----")
         #     print(f"Book: {book}")
         #     print(f"Decompress Phrase: {phrase}")
         #     print(f"Decompressed: {decompressed}")
-        #     print("----")
         phrase = ''
     decompressed += phrase
     # print(f"D Book: {book}")
+    # print("----")
     return decompressed
 
 
-def _decompress_phrase(book: Dict[int, str], compressed_phrase: str, vals_in_book: list[str]) -> Tuple[Dict[int, str], str, list[str]]:
+def _decompress_phrase(book: Dict[int, str], compressed_phrase: str, bookInv: Dict[str, int]) -> Tuple[Dict[int, str], str, Dict[str, int]]:
     new_code: int = len(book)
 
     """
@@ -145,11 +144,11 @@ def _decompress_phrase(book: Dict[int, str], compressed_phrase: str, vals_in_boo
     If the decompressed value is not in the book then we add it to the book
     otherwise we ignore it to avoid duplicates
     """
-    if decompressed_value not in vals_in_book:
-        vals_in_book.append(decompressed_value)
+    if decompressed_value not in bookInv:
         book[new_code] = decompressed_value
+        bookInv[decompressed_value] = new_code
 
-    return book, decompressed_value, vals_in_book
+    return book, decompressed_value, bookInv
 
 
 # Book is used by LZMA to store the phrase and the corresponding code
@@ -165,19 +164,19 @@ def _compress_phrase(book: Dict[str, int], phrase: str) -> Tuple[Dict[str, int],
 
     But if phrase is 'A', we save it as a code in book and return.
     """
+    # TODO: Bug, compression cannot be a plain number
+    # If it does, then numeric escape the last number
     if len(phrase) > 1:
         prefix: str = phrase[:-1]
         # Prefix should be in book, we get the code for it
         prefix_code: int = book[prefix]
         # We get the compressed value for the phrase
         compressed: str = f"{prefix_code}{phrase[-1]}"
-        # Save the phrase in book
-        book[phrase] = new_code
     else:
-        # Save the phrase in book
-        book[phrase] = new_code
         compressed: str = phrase
         # Do numeric escape if the phrase is a number
         if phrase.isnumeric():
             compressed = f"{numeric_escape}{compressed}"
+    if phrase not in book:
+        book[phrase] = new_code
     return book, compressed

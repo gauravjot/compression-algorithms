@@ -83,10 +83,17 @@ class TestLZMA(unittest.TestCase):
 
 
 def perform_test(test_string: str, self):
+    print("\n======================================================================")
+    print(f"Test: {self.id()}")
+    print("----------------------------------------------------------------------\n")
+
     # track time
     start_time = time.time()
     compressed = compress(test_string)
+    time2 = time.time()
+    print("Compression done in\t: {:.10f}s".format(time2 - start_time))
     decompressed = decompress(compressed)
+    print("Decompression done in\t: {:.10f}s".format(time.time() - time2))
     result = test_string == decompressed
 
     if result:
@@ -115,11 +122,9 @@ def compression_ratio(original: str, compressed: str) -> float:
 
 
 def print_stats(test_name: str, test_string: str, compression_ratio: float, time_delta: float):
-    print("\n======================================================================")
-    print(f"Test passed : {test_name}")
-    print("----------------------------------------------------------------------\n")
     print(f"Compression Ratio\t: {compression_ratio}")
-    print("Time\t\t\t: {:.10f}s\n".format(time_delta))
+    print("Total Time\t\t: {:.10f}s".format(time_delta))
+    print(f"Test passed\n")
 
 
 if __name__ == "__main__":
