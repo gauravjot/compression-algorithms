@@ -46,16 +46,16 @@ def compress(input_string: str) -> str:
         """
         book, compressed_phrase = _compress_phrase(book, phrase)
         compressed += compressed_phrase
-        if len(book) > 17:
-            print(f"Book: {book} {len(book)}")
-            print(f"Phrase: '{phrase}'")
-            print(f"Compressed: '{compressed}'")
-            print("----")
+        # if len(book) > 17:
+        #     print(f"Book: {book} {len(book)}")
+        #     print(f"Phrase: '{phrase}'")
+        #     print(f"Compressed: '{compressed}'")
+        #     print("----")
         phrase = ''
     compressed += phrase
-    print("----")
-    print(f"Book: {len(book)}")
-    print(f"C Book: {book}")
+    # print("----")
+    # print(f"Book: {len(book)}")
+    # print(f"C Book: {book}")
     return compressed
 
 

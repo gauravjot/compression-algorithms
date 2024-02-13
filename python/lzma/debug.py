@@ -1,4 +1,5 @@
-from lzma import compress, decompress
+from clzma import compress, decompress
+import lzma as lz
 
 
 def main():
@@ -16,7 +17,9 @@ def main():
         print(f"Decompressed Length: {len(decompressed)}")
     print(
         f"Original and Decompressed are same: {input_string == decompressed}")
-    print("----")
+    print("----lzma")
+    print(lz.compress(input_string.encode('utf-8'),
+          format=lz.FORMAT_XZ))
 
 
 if __name__ == "__main__":

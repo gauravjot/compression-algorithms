@@ -1,4 +1,4 @@
-from lzma import compress, decompress
+from clzma import compress, decompress
 import time
 import unittest
 import os
