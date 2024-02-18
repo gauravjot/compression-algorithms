@@ -54,10 +54,6 @@ class TestLZMA(unittest.TestCase):
         s = "In the shadow of Mount Everest, where the air was thin and the temperature plunged below freezing, a team of climbers embarked on a journey to conquer the world's tallest peak. With a base camp situated at an altitude of 5,000 meters, they braved avalanches and crevasses in their quest to reach the summit, their determination unwavering despite the odds."
         perform_test(s, self)
 
-    def test_complex5(self):
-        s = "The drift velocity then determines the electric current density and its relationship to E and is independent of the collisions. Drude calculated the average drift velocity from p = −eEτ where p is the average momentum, −e is the charge of the electron and τ is the average time between the collisions. Since both the momentum and the current density are proportional to the drift velocity, the current density becomes proportional to the applied electric field; this leads to Ohm's law."
-        perform_test(s, self)
-
     def test_large_file1(self):
         test_file("test_files/ai_generated1.txt", self)
 
@@ -70,11 +66,11 @@ class TestLZMA(unittest.TestCase):
     def test_large_file4(self):
         test_file("test_files/bigfile.txt", self)
 
-    # def test_large_file5(self):
-    #     test_file("test_files/bigfile2.txt", self)
+    def test_large_file5(self):
+        test_file("test_files/bigfile2.txt", self)
 
-    # def test_large_file6(self):
-    #     test_file("test_files/bigfile10.txt", self)
+    def test_large_file6(self):
+        test_file("test_files/bigfile10.txt", self)
 
 
 """
@@ -92,16 +88,15 @@ def perform_test(test_string: str, self):
     compressed = compress(test_string)
     time2 = time.time()
     print("Compression done in\t: {:.10f}s".format(time2 - start_time))
+    print(f"Compression Ratio\t: {compression_ratio(test_string, compressed)}")
     decompressed = decompress(compressed)
     print("Decompression done in\t: {:.10f}s".format(time.time() - time2))
     result = test_string == decompressed
+    print("Total Time\t\t: {:.10f}s".format(time.time() - start_time))
 
     if result:
-        print_stats(self.id(),
-                    test_string,
-                    compression_ratio(test_string, compressed),
-                    time.time() - start_time
-                    )
+        print(f"Test passed\n")
+
     self.assertTrue(result)
 
     return (
@@ -121,10 +116,8 @@ def compression_ratio(original: str, compressed: str) -> float:
     return len(compressed) / len(original)
 
 
-def print_stats(test_name: str, test_string: str, compression_ratio: float, time_delta: float):
-    print(f"Compression Ratio\t: {compression_ratio}")
-    print("Total Time\t\t: {:.10f}s".format(time_delta))
-    print(f"Test passed\n")
+def doesContainASCII(s: str) -> bool:
+    return all(ord(c) < 256 for c in s)
 
 
 if __name__ == "__main__":

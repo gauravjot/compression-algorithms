@@ -1,10 +1,39 @@
 from typing import Tuple, Dict
 
-"""
-This is useful to distinguish between a number and a phrase
-    although it has a cost of 1 character added to the compressed string
-"""
-numeric_escape: str = "Ø"
+custom_numbering_g_i: Dict[str, int] = {
+    "α": 0,
+    "β": 1,
+    "γ": 2,
+    "δ": 3,
+    "ε": 4,
+    "ζ": 5,
+    "η": 6,
+    "θ": 7,
+    "ι": 8,
+    "κ": 9
+}
+custom_numbering_i_g: Dict[int, str] = {
+    0: "α",
+    1: "β",
+    2: "γ",
+    3: "δ",
+    4: "ε",
+    5: "ζ",
+    6: "η",
+    7: "θ",
+    8: "ι",
+    9: "κ"
+}
+
+
+def convertIntToCustom(number: int) -> str:
+    result: str = ""
+    if number == 0:
+        return "α"
+    while number > 0:
+        result = custom_numbering_i_g[number % 10] + result
+        number = number // 10
+    return result
 
 
 def compress(input_string: str) -> str:
@@ -61,7 +90,7 @@ def compress(input_string: str) -> str:
 
 def decompress(compressed: str) -> str:
     """
-    Decompress the input string using LZMA algorithm
+
     """
     # Book is used by LZMA to store the phrase and the corresponding code
     book: Dict[int, str] = {0: "", 1: " "}
@@ -71,12 +100,7 @@ def decompress(compressed: str) -> str:
     numeric_escape_next_char: bool = False
     for char in compressed:
         """
-        If the character is numeric_escape then
-            - we set the flag to True
-            - we just ignore the numeric_escape character
-            - decompress the phrase before it
-            - and continue to the next character that we simply
-                add to the decompressed string and book
+
         """
         if char == numeric_escape:
             numeric_escape_next_char = True
