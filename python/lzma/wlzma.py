@@ -8,6 +8,8 @@ from typing import Dict
     and the next character
 - More efficient than the 'clzma.py' implementation in terms of compression ratio
 - Efficiency due to better dictionary building
+
+- Does fail for large files and as dictionary size gets over 0x110000
 """
 
 
@@ -36,44 +38,34 @@ def compress(input_string: str) -> str:
             phrase = ''
         else:
             continue
+    # print(f"C Book: {book}")
     return compressed
 
 
 def decompress(compressed: str) -> str:
     # Book is used by LZMA to store the phrase and the corresponding code
-    book: Dict[str, str] = {}
     decompressed: str = ""
-    phrase: str = ""
-    len_compressed = len(compressed)
-    i = 0
-    while i in range(len_compressed):
-        phrase = compressed[i]
-        next_char = compressed[i+1] if i+1 < len_compressed else ''
-        # Output based on phrase
-        if ord(phrase) < ASCII_CUTOFF:
-            output = phrase
+    book: Dict[int, str] = {}
+    for i in range(ASCII_CUTOFF):
+        book[i] = chr(i)
+    old_code = ord(compressed[0])
+    str1 = book[old_code]
+    str2 = str1[0]
+    decompressed += str1
+    count = ASCII_CUTOFF
+    for i in range(len(compressed)-1):
+        next_char = ord(compressed[i+1])
+        if next_char not in book:
+            str1 = book[old_code]
+            str1 += str2
         else:
-            output = book[phrase]
-        decompressed += output
-        # If we have reached the end of the compressed string, exit
-        if len(next_char) == 0:
-            break
-        # If the next character is ASCII, then save it in the book
-        try:
-            if ord(next_char) < ASCII_CUTOFF:
-                book[getBookVal(len(book))] = output + next_char
-            else:
-                # If the next character is not ASCII, then find the corresponding
-                # value in the book and save output + the first character of it
-                book[getBookVal(len(book))] = output + book[next_char][0]
-        except KeyError as e:
-            print(f"Decompressed: {decompressed}")
-            print(f"Output: {output}")
-            print(f"next char: {next_char}")
-            print(f"d Book: {book}")
-            # throw error
-            raise Exception(f"KeyError: {e}")
-        i += 1
+            str1 = book[next_char]
+        decompressed += str1
+        str2 = str1[0]
+        book[count] = book[old_code] + str2
+        count += 1
+        old_code = next_char
+    # print(f"D Book: {book}")
     return decompressed
 
 
