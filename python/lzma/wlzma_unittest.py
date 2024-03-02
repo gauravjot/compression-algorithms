@@ -63,14 +63,14 @@ class TestLZMA(unittest.TestCase):
     def test_large_file3(self):
         test_file("test_files/psychology.txt", self)
 
-    # def test_large_file4(self):
-    #     test_file("test_files/bigfile.txt", self)
+    def test_large_file4(self):
+        test_file("test_files/bigfile.txt", self)
 
-    # def test_large_file5(self):
-    #     test_file("test_files/bigfile2.txt", self)
+    def test_large_file5(self):
+        test_file("test_files/bigfile2.txt", self)
 
-    # def test_large_file6(self):
-    #     test_file("test_files/bigfile10.txt", self)
+    def test_large_file6(self):
+        test_file("test_files/bigfile10.txt", self)
 
 
 """
