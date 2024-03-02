@@ -26,62 +26,60 @@ def compress(input_string: str) -> str:
     compressed: str = ""
     phrase: str = ""
     len_input_string = len(input_string)
-    for i in range(len_input_string):
+    i = 0
+    while i in range(len_input_string):
         phrase += input_string[i]
         next_char = input_string[i+1] if i+1 < len_input_string else ''
         if len(next_char) == 0:
             compressed += phrase
+            i += 1
             break
         if (phrase + next_char) not in book:
             compressed += phrase if len(phrase) == 1 else book[phrase]
             book[phrase + next_char] = getBookVal(len(book))
             phrase = ''
-        else:
-            continue
+        i += 1
     # print(f"C Book: {book}")
     return compressed
 
 
 def decompress(compressed: str) -> str:
     # Book is used by LZMA to store the phrase and the corresponding code
-    decompressed: str = ""
-    book: Dict[int, str] = {}
-    for i in range(ASCII_CUTOFF):
-        book[i] = chr(i)
-    old_code = ord(compressed[0])
-    str1 = book[old_code]
-    str2 = str1[0]
-    decompressed += str1
-    count = ASCII_CUTOFF
-    for i in range(len(compressed)-1):
-        next_char = ord(compressed[i+1])
-        if next_char not in book:
-            str1 = book[old_code]
-            str1 += str2
+    book: Dict[str, str] = {}
+    phrase_fc = compressed[0]   # first character of the first phrase
+    cur_char = phrase_fc        # current character
+    output = phrase_fc
+    i = 0
+    while i in range(len(compressed)-1):
+        next_char = compressed[i+1]
+        if ord(next_char) >= ASCII_CUTOFF and next_char not in book:
+            decoded = book[cur_char] if cur_char in book else cur_char
+            decoded += phrase_fc
         else:
-            str1 = book[next_char]
-        decompressed += str1
-        str2 = str1[0]
-        book[count] = book[old_code] + str2
-        count += 1
-        old_code = next_char
+            decoded = book[next_char] if next_char in book else next_char
+        output += decoded
+        phrase_fc = decoded[0]
+        if ord(cur_char) >= ASCII_CUTOFF:
+            book[getBookVal(i)] = book[cur_char] + phrase_fc
+        else:
+            book[getBookVal(i)] = cur_char + phrase_fc
+        i += 1
+        cur_char = next_char
     # print(f"D Book: {book}")
-    return decompressed
+    return output
 
 
 def main():
-    # Array of test strings made of alphanumeric
-    # the air was thin and the temperature plunged below freezing"
     input_string = "ABABABAA"
-    print(f"Original value: {input_string}")
+    print(f"\nOriginal value:\n'{input_string}'")
     compressed = compress(input_string)
-    print(f"Compressed: '{compressed}'")
-    print(f"Compression Ratio: {len(compressed)/len(input_string)}")
+    print(f"\nCompressed:\n'{compressed}'")
+    print(f"\nCompression Ratio:\n{len(compressed)/len(input_string)}")
 
     decompressed = decompress(compressed)
-    print(f"Decompressed value: '{decompressed}'")
+    print(f"\nDecompressed value:\n'{decompressed}'")
     print(
-        f"Original and Decompressed are same: {input_string == decompressed}")
+        f"\nOriginal and Decompressed are same:\n{input_string == decompressed}")
 
 
 if __name__ == "__main__":
