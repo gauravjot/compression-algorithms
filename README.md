@@ -30,7 +30,9 @@ Now if we are to use two characters for encoding, for example, 256 257 for a pat
 
 For example, if we use 256 to encode 'AB' and then we use 256 257 to encode 'DEG', during decompression for 256 257 we need to accurately determine that it is 'DEG' and not 'AB' 257. I can use a delimeter to separate the two encoded characters but that will increase the size of the encoded string and lower the compression ratio.
 
-**Memory Complications**: As the dictionary grows, the space required to store the dictionary will also grow. Therefore, this algorithm can become very memory intensive and may have poor performance for systems with low memory.
+#### Memory Complications
+
+As the dictionary grows, the space required to store the dictionary will also grow. Therefore, this algorithm can become very memory intensive and may have poor performance for systems with low memory.
 
 #### References
 
@@ -44,6 +46,10 @@ This approach was based on the idea that we can use a numbering system to encode
 This algorithm thus works for any filesize but produces a poorer compression ratio as you are required to choose a base for numbering (for example 0-9 is base 10, and saving 11 will require 2 bytes). Therefore, this can often produce a larger file than the original and **is not recommended for use**. This is also slower than the ASCII implementation described above.
 
 **Challenges**: The main challenge is to distinguish when we have used a single encoded character and when we have used two as well as if the text contains any of the symbols used in custom numbering. For example, in this repository implementation, we have used Greek letters to accomplish this. If the text contains Greek letters, the decompression will fail.
+
+#### References
+
+-   [The Beauty of Lempel-Ziv Compression](https://www.youtube.com/watch?v=RV5aUr8sZD0) - Art of the Problem - YouTube
 
 ### 3. Limpel-Ziv with Hex Encoding for ASCII
 
